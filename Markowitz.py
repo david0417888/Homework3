@@ -221,7 +221,7 @@ class MeanVariancePortfolio:
                 # Sample Code: Initialize Decision w and the Objective
                 # NOTE: You can modify the following code
                 """
-                TODO: Complete Task 3 Below
+                TODO: Complete Task 3 Below2
                 """
                 model.optimize()
 
