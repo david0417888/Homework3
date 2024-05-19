@@ -205,7 +205,7 @@ class MeanVariancePortfolio:
             env.start()
             with gp.Model(env=env, name="portfolio") as model:
                 """
-                TODO: Complete Task 3 Belowdddd
+                TODO: Complete Task 3 Below
                 """
                             # Add decision variables for portfolio weights
                 w = model.addMVar(n, name="w", ub=1)
