@@ -66,6 +66,18 @@ class EqualWeightPortfolio:
         """
         TODO: Complete Task 1 Below
         """
+        assets = df.columns[df.columns != self.exclude]
+        num_assets = len(assets)
+        equal_weight = 1 / num_assets
+        
+        self.portfolio_weights = pd.DataFrame(index=df.index, columns=df.columns)
+        self.portfolio_weights[assets] = equal_weight
+
+        # Ensure SPY has zero weight
+        self.portfolio_weights[self.exclude] = 0
+
+        self.portfolio_weights.ffill(inplace=True)
+        self.portfolio_weights.fillna(0, inplace=True)
 
         """
         TODO: Complete Task 1 Above
@@ -117,6 +129,12 @@ class RiskParityPortfolio:
         """
         TODO: Complete Task 2 Below
         """
+        for i in range(self.lookback + 1, len(df)):
+            R_n = df_returns[assets].iloc[i - self.lookback:i]
+            cov_matrix = R_n.cov()
+            inv_volatility = 1 / np.sqrt(np.diag(cov_matrix))
+            weights = inv_volatility / inv_volatility.sum()
+            self.portfolio_weights.loc[df.index[i], assets] = weights
 
         """
         TODO: Complete Task 2 Above
@@ -189,12 +207,19 @@ class MeanVariancePortfolio:
                 """
                 TODO: Complete Task 3 Below
                 """
+                            # Add decision variables for portfolio weights
+                w = model.addMVar(n, name="w", ub=1)
 
+            # Define the objective function: Minimize (1/2 * w' * Sigma * w) - gamma * mu' * w
+                model.setObjective((1/2) * w @ Sigma @ w - gamma * mu @ w, gp.GRB.MINIMIZE)
+
+            # Add constraint: Sum of weights should be 1 (no leverage constraint)
+                model.addConstr(w.sum() == 1, name="budget")
+
+            # Add constraint: Weights should be non-negative (long-only constraint)
+                model.addConstrs((w[i] >= 0 for i in range(n)), name="long_only")
                 # Sample Code: Initialize Decision w and the Objective
                 # NOTE: You can modify the following code
-                w = model.addMVar(n, name="w", ub=1)
-                model.setObjective(w.sum(), gp.GRB.MAXIMIZE)
-
                 """
                 TODO: Complete Task 3 Below
                 """
