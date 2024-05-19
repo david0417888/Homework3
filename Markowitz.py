@@ -205,7 +205,7 @@ class MeanVariancePortfolio:
             env.start()
             with gp.Model(env=env, name="portfolio") as model:
                 """
-                TODO: Complete Task 3 Below
+                TODO: Complete Task 3 Belowdddd
                 """
                             # Add decision variables for portfolio weights
                 w = model.addMVar(n, name="w", ub=1)
@@ -221,7 +221,7 @@ class MeanVariancePortfolio:
                 # Sample Code: Initialize Decision w and the Objective
                 # NOTE: You can modify the following code
                 """
-                TODO: Complete Task 3 Below2
+                TODO: Complete Task 3 Below
                 """
                 model.optimize()
 
