@@ -207,16 +207,16 @@ class MeanVariancePortfolio:
                 """
                 TODO: Complete Task 3 Below
                 """
-                            # Add decision variables for portfolio weights
+                # Add decision variables for portfolio weights
                 w = model.addMVar(n, name="w", ub=1)
 
-            # Define the objective function: Minimize (1/2 * w' * Sigma * w) - gamma * mu' * w
-                model.setObjective((1/2) * w @ Sigma @ w - gamma * mu @ w, gp.GRB.MINIMIZE)
-
-            # Add constraint: Sum of weights should be 1 (no leverage constraint)
+                # Define the objective function: Minimize (1/2 * w' * Sigma * w) - gamma * mu' * w
+                model.setObjective(w @ mu - (gamma / 2) * (w @ Sigma @ w), gp.GRB.MAXIMIZE)
+                # Add constraint: Sum of weights should be 1 (no leverage constraint)
+                
                 model.addConstr(w.sum() == 1, name="budget")
 
-            # Add constraint: Weights should be non-negative (long-only constraint)
+                # Add constraint: Weights should be non-negative (long-only constraint)
                 model.addConstrs((w[i] >= 0 for i in range(n)), name="long_only")
                 # Sample Code: Initialize Decision w and the Objective
                 # NOTE: You can modify the following code
