@@ -31,6 +31,7 @@ assets = [
 ]
 data = pd.DataFrame()
 
+
 # Fetch the data for each stock and concatenate it to the `data` DataFrame
 for asset in assets:
     raw = yf.download(asset, start="2012-01-01", end="2024-04-01")
@@ -42,10 +43,10 @@ Bdf = portfolio_data = data.pivot_table(
     index="Date", columns="Symbol", values="Adj Close"
 )
 df = Bdf.loc["2019-01-01":"2024-04-01"]
-
 """
 Strategy Creation
-
+goal 1 : Achieve a Sharpe Ratio greater than 1 during the backtest period from 2019 to 2024.
+goal 2 : Outperform the SPY’s Sharpe Ratio during the backtest period from 2012 to 2024.
 Create your own strategy, you can add parameter but please remain "price" and "exclude" unchanged
 """
 
@@ -74,14 +75,19 @@ class MyPortfolio:
         """
         TODO: Complete Task 4 Below
         """
+        for date in self.portfolio_weights.index:
+            self.portfolio_weights.loc[date, :] = 0
+            self.portfolio_weights.loc[date, "XLK"] = 0.99
 
+        # Ensure SPY has zero weight
+        self.portfolio_weights["SPY"] = 0
+        # Ensure SPY has zero weight
         """
         TODO: Complete Task 4 Above
         """
 
         self.portfolio_weights.ffill(inplace=True)
         self.portfolio_weights.fillna(0, inplace=True)
-
     def calculate_portfolio_returns(self):
         # Ensure weights are calculated
         if not hasattr(self, "portfolio_weights"):
@@ -168,6 +174,7 @@ class AssignmentJudge:
             return 10
         else:
             print("Problem 4.1 Fail")
+            print(self.report_metrics(df, self.mp)[1])
         return 0
 
     def check_sharp_ratio_greater_than_spy(self):
