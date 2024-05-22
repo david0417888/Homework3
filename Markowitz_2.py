@@ -174,7 +174,6 @@ class AssignmentJudge:
             return 10
         else:
             print("Problem 4.1 Fail")
-            print(self.report_metrics(df, self.mp)[1])
         return 0
 
     def check_sharp_ratio_greater_than_spy(self):
